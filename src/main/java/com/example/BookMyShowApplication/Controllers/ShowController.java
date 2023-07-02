@@ -16,7 +16,7 @@ import java.sql.Time;
 @RequestMapping("/show")
 public class ShowController {
     @Autowired
-    ShowServiceImpl showService;
+    private ShowServiceImpl showService;
     @PostMapping("/addShow")
     public ResponseEntity<String> addShow(@RequestBody ShowEntryDto showEntryDto){
         try {

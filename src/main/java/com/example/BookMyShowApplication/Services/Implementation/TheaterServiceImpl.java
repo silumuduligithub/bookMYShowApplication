@@ -4,21 +4,25 @@ import com.example.BookMyShowApplication.Dtos.RequestDto.TheaterEntryDto;
 import com.example.BookMyShowApplication.Dtos.RequestDto.TheaterSeatsEntryDto;
 import com.example.BookMyShowApplication.Enums.SeatType;
 import com.example.BookMyShowApplication.Exceptions.TheaterNotFoundException;
+import com.example.BookMyShowApplication.Model.Show;
 import com.example.BookMyShowApplication.Model.Theater;
 import com.example.BookMyShowApplication.Model.TheaterSeat;
+import com.example.BookMyShowApplication.Repositorys.ShowRepository;
 import com.example.BookMyShowApplication.Repositorys.TheaterRepository;
 import com.example.BookMyShowApplication.Services.TheaterService;
 import com.example.BookMyShowApplication.Transfermers.TheaterTransfermers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalTime;
+import java.util.*;
 
 @Service
 public class TheaterServiceImpl implements TheaterService {
     @Autowired
     private TheaterRepository theaterRepository;
+    @Autowired
+    private ShowRepository showRepository;
     @Override
     public void addTheater(TheaterEntryDto theaterEntryDto) {
         Theater theater = TheaterTransfermers.convertTheaterDtoToEntity(theaterEntryDto);
@@ -66,5 +70,34 @@ public class TheaterServiceImpl implements TheaterService {
             theaterSeatList.add(theaterSeat);
         }
         theaterRepository.save(theater);
+    }
+    @Override
+    public int uniqueLocationsOfAtheater(int theaterId) {
+        Set<Integer> shows = new HashSet<>();
+        List<Show> showList = theaterRepository.findById(theaterId).get().getShowList();
+        int count = 0;
+        for(Show show : showList){
+            if(!shows.contains(show.getMovie().getMovieId())){
+                count++;
+            }
+            shows.add(show.getMovie().getMovieId());
+        }
+        return count;
+    }
+    @Override
+    public List<Theater> listOfTheatersShowingAparticularTime(int showId) {
+        Show show = showRepository.findById(showId).get();
+        List<Theater> theaterList = theaterRepository.findAll();
+        List<Theater> ans = new ArrayList<>();
+        for(Theater theater : theaterList) {
+            List<Show> showList = theater.getShowList();
+            for (Show show1 : showList) {
+                if (show.getTime() == show1.getTime()) {
+                    ans.add(theater);
+                    break;
+                }
+            }
+        }
+        return ans;
     }
 }

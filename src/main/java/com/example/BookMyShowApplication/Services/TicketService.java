@@ -1,5 +1,6 @@
 package com.example.BookMyShowApplication.Services;
 
+import com.example.BookMyShowApplication.Dtos.RequestDto.TicketListDto;
 import com.example.BookMyShowApplication.Dtos.RequestDto.TicketRequestDto;
 import com.example.BookMyShowApplication.Dtos.ResponseDto.TicketResponseDto;
 import com.example.BookMyShowApplication.Exceptions.SeatNotAvailable;
@@ -10,4 +11,5 @@ import com.example.BookMyShowApplication.Exceptions.UserNotfound;
 public interface TicketService {
     public TicketResponseDto bookTicket(TicketRequestDto ticketRequestDto)throws UserNotfound, ShowNotFound, SeatNotAvailable;
     public void cancelTicket(int ticketId)throws TicketNotFoundException;
+    public TicketListDto getAllTheTicketBookedByParticularUser(int userId)throws UserNotfound;
 }

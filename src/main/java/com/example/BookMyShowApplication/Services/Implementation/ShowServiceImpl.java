@@ -80,12 +80,12 @@ public class ShowServiceImpl implements ShowService {
         }
         showRepository.save(show);
     }
-
+    @Override
     public String getMovieName(ShowEntryDto showEntryDto) {
         Movie movie = movieRepository.findById(showEntryDto.getMovieId()).get();
         return movie.getMovieName();
     }
-
+    @Override
     public TimeResponseDto getshowTimeOfAParticularMovieInaParticularTheater(ShowTimeDto showTimeDto)throws TheaterNotFoundException, MovieNotFound, ShowNotFound {
         Optional<Theater> theaterOptional = theaterRepository.findById(showTimeDto.getTheaeterId());
         if(theaterOptional.isEmpty()){

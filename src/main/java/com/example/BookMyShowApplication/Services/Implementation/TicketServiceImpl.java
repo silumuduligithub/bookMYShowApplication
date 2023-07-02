@@ -1,5 +1,6 @@
 package com.example.BookMyShowApplication.Services.Implementation;
 
+import com.example.BookMyShowApplication.Dtos.RequestDto.TicketListDto;
 import com.example.BookMyShowApplication.Dtos.RequestDto.TicketRequestDto;
 import com.example.BookMyShowApplication.Dtos.ResponseDto.TicketResponseDto;
 import com.example.BookMyShowApplication.Exceptions.SeatNotAvailable;
@@ -12,6 +13,7 @@ import com.example.BookMyShowApplication.Repositorys.TicketRepository;
 import com.example.BookMyShowApplication.Repositorys.UserRepository;
 import com.example.BookMyShowApplication.Services.TicketService;
 import com.example.BookMyShowApplication.Transfermers.TicketTransfermer;
+import com.example.BookMyShowApplication.Transfermers.UserTransfermer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -118,7 +120,7 @@ public class TicketServiceImpl implements TicketService {
         }
         return true;
     }
-
+    @Override
     public void cancelTicket(int ticketId)throws TicketNotFoundException {
         Optional<Ticket> ticketOpotional = ticketRepository.findById(ticketId);
         if(ticketOpotional.isEmpty()){
@@ -144,5 +146,15 @@ public class TicketServiceImpl implements TicketService {
                 showSeat.setFoodAttached(false);
             }
         }
+    }
+
+    public TicketListDto getAllTheTicketBookedByParticularUser(int userId)throws UserNotfound {
+        Optional<User> userOptional = userRepository.findById(userId);
+        if(userOptional.isEmpty()){
+            throw new UserNotfound("invalid user id");
+        }
+        User user = userOptional.get();
+        List<Ticket> ticketList = user.getTicketList();
+        return UserTransfermer.convertListTicketToTicketListDtoEntiry(ticketList);
     }
 }
