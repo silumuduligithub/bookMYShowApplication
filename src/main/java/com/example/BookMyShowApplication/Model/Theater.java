@@ -21,6 +21,7 @@ public class Theater {
 
     private String theaterName;
 
+
     @Column(unique = true)
     private String location;
 

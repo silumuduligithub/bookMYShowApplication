@@ -17,9 +17,12 @@ public class Ticket {
     private int id;
     private String movieName;
     private String theaterName;
+    private String location;
     private Date date;
     private LocalTime time;
-    private int bookedSeats;
+    private int totalSeats;
+    private String bookedSeatsNumber;
+    private List<String> showSeatList;
     private int totalPrice;
 
     @ManyToOne

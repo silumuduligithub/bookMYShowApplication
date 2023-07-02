@@ -19,11 +19,12 @@ import java.util.Optional;
 public class TheaterServiceImpl implements TheaterService {
     @Autowired
     private TheaterRepository theaterRepository;
+    @Override
     public void addTheater(TheaterEntryDto theaterEntryDto) {
         Theater theater = TheaterTransfermers.convertTheaterDtoToEntity(theaterEntryDto);
         theaterRepository.save(theater);
     }
-
+    @Override
     public void addTheaterSeatInsideTheTheater(TheaterSeatsEntryDto theaterSeatsEntryDto)throws TheaterNotFoundException {
         Optional<Theater> theaterOptional = theaterRepository.findByLocation(theaterSeatsEntryDto.getTheaterLocation());
         if(theaterOptional.isEmpty()){
